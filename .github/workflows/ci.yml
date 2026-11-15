@@ -1,7 +1,8 @@
-name: CI - Code Quality
+name: CI Code Quality
+
 on:
   push:
-    branches: [main]
+    branches: [main, fitur-coverage]
   pull_request:
     branches: [main]
 
@@ -12,31 +13,23 @@ jobs:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
-
       - name: Install dependencies
         run: pip install -r requirements.txt
-
       - name: Lint (Ruff)
         run: ruff check .
-
       - name: Format Check (Black)
         run: black --check .
-
       - name: Run Tests with Coverage
         run: pytest --cov=. --cov-report=xml --cov-fail-under=80
-
-      # Codecov bersifat opsional. Upload hanya dijalankan jika secret
-      # CODECOV_TOKEN sudah diset di Settings > Secrets and variables > Actions.
       - name: Upload coverage to Codecov
         if: ${{ env.CODECOV_TOKEN != '' }}
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
+          file: ./coverage.xml
           fail_ci_if_error: true
