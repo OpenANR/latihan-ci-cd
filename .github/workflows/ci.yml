@@ -2,7 +2,7 @@ name: CI Code Quality
 
 on:
   push:
-    branches: [main]
+    branches: [main, fitur-coverage]
   pull_request:
     branches: [main]
 
@@ -22,11 +22,8 @@ jobs:
         run: ruff check .
       - name: Format Check (Black)
         run: black --check .
-      - name: Run Tests
-        run: pytest --cov=. --cov-fail-under=50
-        - name: Run Tests with Coverage
+      - name: Run Tests with Coverage
         run: pytest --cov=. --cov-report=xml --cov-fail-under=80
-
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
