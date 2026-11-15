@@ -8,6 +8,8 @@ on:
 jobs:
   quality:
     runs-on: ubuntu-latest
+    env:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -32,7 +34,7 @@ jobs:
       # Codecov bersifat opsional. Upload hanya dijalankan jika secret
       # CODECOV_TOKEN sudah diset di Settings > Secrets and variables > Actions.
       - name: Upload coverage to Codecov
-        if: ${{ secrets.CODECOV_TOKEN != '' }}
+        if: ${{ env.CODECOV_TOKEN != '' }}
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
